@@ -18,7 +18,6 @@ package com.helger.peppol.sk.tdd.v100;
 
 import java.math.BigDecimal;
 
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.TaxExemptionReasonType;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -33,6 +32,7 @@ import com.helger.base.string.StringHelper;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.TaxCategoryType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.TaxSchemeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.TaxExemptionReasonType;
 
 /**
  * Builder for Peppol SK TDD 1.0.0 sub element called "TaxCategory".
@@ -70,21 +70,12 @@ public class PeppolSKTDD100TaxCategoryBuilder implements IBuilder <TaxCategoryTy
     if (aTaxScheme != null)
       taxSchemeID (aTaxScheme.getIDValue ());
 
-    if (!aObj.getTaxExemptionReason().isEmpty())
-    {
-      for (var taxExemptionReason : aObj.getTaxExemptionReason())
-      {
-        if (!StringHelper.isEmpty(taxExemptionReason.getValue()))
-        {
-          taxExemptionReason(taxExemptionReason.getValue());
-        }
-      }
-    }
+    for (final var aTER : aObj.getTaxExemptionReason ())
+      if (StringHelper.isNotEmpty (aTER.getValue ()))
+        taxExemptionReason (aTER.getValue ());
 
-    if (aObj.getTaxExemptionReasonCode() != null)
-    {
-      taxExemptionReasonCode(aObj.getTaxExemptionReasonCode().getValue());
-    }
+    if (aObj.getTaxExemptionReasonCode () != null)
+      taxExemptionReasonCode (aObj.getTaxExemptionReasonCode ().getValue ());
 
     return this;
   }
@@ -206,23 +197,22 @@ public class PeppolSKTDD100TaxCategoryBuilder implements IBuilder <TaxCategoryTy
     ret.setID (m_sID);
     if (m_aPerc != null)
       ret.setPercent (m_aPerc);
+
     {
       final TaxSchemeType aTS = new TaxSchemeType ();
       aTS.setID (m_sTaxSchemeID);
       ret.setTaxScheme (aTS);
     }
 
-    if (!StringHelper.isEmpty(m_sTaxExemptionReason))
+    if (StringHelper.isNotEmpty (m_sTaxExemptionReason))
     {
       final TaxExemptionReasonType aET = new TaxExemptionReasonType ();
-      aET.setValue(m_sTaxExemptionReason);
-      ret.getTaxExemptionReason().add(aET);
+      aET.setValue (m_sTaxExemptionReason);
+      ret.addTaxExemptionReason (aET);
     }
 
-    if (!StringHelper.isEmpty(m_sTaxExemptionReasonCode))
-    {
-      ret.setTaxExemptionReasonCode(m_sTaxExemptionReasonCode);
-    }
+    if (StringHelper.isNotEmpty (m_sTaxExemptionReasonCode))
+      ret.setTaxExemptionReasonCode (m_sTaxExemptionReasonCode);
 
     return ret;
   }

@@ -74,6 +74,10 @@ to build the solution.
 
 # News and noteworthy
 
+v0.2.1 - 2028-08-12
+* Added the mapping of tax exemption reason (BT-120) and tax exemption reason code (BT-121) in class `PeppolSKTDD100TaxCategoryBuilder`.
+  See [#3](https://github.com/phax/peppol-sk/pull/3) - thx @vrbyjimmy
+
 v0.2.0 - 2026-07-17
 * Updated to ph-schematron v10.x
 * Requires at least phive 12.0.2
