@@ -18,6 +18,7 @@ package com.helger.peppol.sk.tdd.v100;
 
 import java.math.BigDecimal;
 
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.TaxExemptionReasonType;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -45,6 +46,8 @@ public class PeppolSKTDD100TaxCategoryBuilder implements IBuilder <TaxCategoryTy
   private String m_sID;
   private BigDecimal m_aPerc;
   private String m_sTaxSchemeID;
+  private String m_sTaxExemptionReason;
+  private String m_sTaxExemptionReasonCode;
 
   public PeppolSKTDD100TaxCategoryBuilder ()
   {}
@@ -66,6 +69,22 @@ public class PeppolSKTDD100TaxCategoryBuilder implements IBuilder <TaxCategoryTy
     final TaxSchemeType aTaxScheme = aObj.getTaxScheme ();
     if (aTaxScheme != null)
       taxSchemeID (aTaxScheme.getIDValue ());
+
+    if (!aObj.getTaxExemptionReason().isEmpty())
+    {
+      for (var taxExemptionReason : aObj.getTaxExemptionReason())
+      {
+        if (!StringHelper.isEmpty(taxExemptionReason.getValue()))
+        {
+          taxExemptionReason(taxExemptionReason.getValue());
+        }
+      }
+    }
+
+    if (aObj.getTaxExemptionReasonCode() != null)
+    {
+      taxExemptionReasonCode(aObj.getTaxExemptionReasonCode().getValue());
+    }
 
     return this;
   }
@@ -121,6 +140,32 @@ public class PeppolSKTDD100TaxCategoryBuilder implements IBuilder <TaxCategoryTy
     return this;
   }
 
+  @Nullable
+  public String taxExemptionReason ()
+  {
+    return m_sTaxExemptionReason;
+  }
+
+  @NonNull
+  public PeppolSKTDD100TaxCategoryBuilder taxExemptionReason (@Nullable final String s)
+  {
+    m_sTaxExemptionReason = s;
+    return this;
+  }
+
+  @Nullable
+  public String taxExemptionReasonCode ()
+  {
+    return m_sTaxExemptionReasonCode;
+  }
+
+  @NonNull
+  public PeppolSKTDD100TaxCategoryBuilder taxExemptionReasonCode (@Nullable final String s)
+  {
+    m_sTaxExemptionReasonCode = s;
+    return this;
+  }
+
   private boolean _isEveryRequiredFieldSet (final boolean bDoLogOnError, @NonNull final MutableInt aReportedDocsErrs)
   {
     final ConditionalLogger aCondLog = new ConditionalLogger (LOGGER, bDoLogOnError);
@@ -166,6 +211,19 @@ public class PeppolSKTDD100TaxCategoryBuilder implements IBuilder <TaxCategoryTy
       aTS.setID (m_sTaxSchemeID);
       ret.setTaxScheme (aTS);
     }
+
+    if (!StringHelper.isEmpty(m_sTaxExemptionReason))
+    {
+      final TaxExemptionReasonType aET = new TaxExemptionReasonType ();
+      aET.setValue(m_sTaxExemptionReason);
+      ret.getTaxExemptionReason().add(aET);
+    }
+
+    if (!StringHelper.isEmpty(m_sTaxExemptionReasonCode))
+    {
+      ret.setTaxExemptionReasonCode(m_sTaxExemptionReasonCode);
+    }
+
     return ret;
   }
 }
